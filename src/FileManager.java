@@ -1,9 +1,16 @@
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class FileManager {
+    private final InvertedIndex invertedIndex;
+
+    public FileManager(InvertedIndex invertedIndex){
+        this.invertedIndex = invertedIndex;
+    }
     public String readFile(File file) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
 
@@ -24,7 +31,14 @@ public class FileManager {
             }
         }else{
             String fileContent = readFile(directory);
-            System.out.println(fileContent);
+            String[] splittedContent = fileContent.split("\\W"); //split non-word characters
+            List<String> wordList = Stream.of(splittedContent)
+                    .filter(str -> !str.isEmpty())
+                    .toList();
+            for (String word : wordList){
+                invertedIndex.addToMapping(word, directory.toString());
+                System.out.println(invertedIndex.getMapping());
+            }
         }
     }
 }
