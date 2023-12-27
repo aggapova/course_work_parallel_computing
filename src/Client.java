@@ -4,17 +4,16 @@ import java.util.Scanner;
 
 public class Client {
     private static final Scanner scanner = new Scanner(System.in);
+    private static final String host = "localhost";
+    private static final int port = 8888;
+
 
     public static void main(String[] args) {
-        connectToServer();
-    }
-
-    private static void connectToServer() {
-        try (Socket serverSocket = new Socket("localhost", 9999);
+        try (Socket serverSocket = new Socket(host, port);
              DataOutputStream out = new DataOutputStream(serverSocket.getOutputStream());
              DataInputStream in = new DataInputStream(serverSocket.getInputStream())) {
 
-            System.out.print("Enter the num of threads: ");
+            System.out.print("Enter num of threads: ");
             int numberOfThreads = scanner.nextInt();
             out.writeInt(numberOfThreads);
 
@@ -25,7 +24,6 @@ public class Client {
 
             String indexedFiles = in.readUTF();
             System.out.println(indexedFiles);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
