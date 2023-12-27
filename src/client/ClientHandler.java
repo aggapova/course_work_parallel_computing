@@ -28,14 +28,20 @@ public class ClientHandler implements Runnable {
             List<File> filesList = fileManager.getAll();
             System.out.println("Server is reading from the channel");
 
-            int numOfThreads = in.readInt();
-            FileProcessor fileProcessor = new FileProcessor(fileManager);
-            fileProcessor.process(numOfThreads, filesList);
+            while (true) {
+                int numOfThreads = in.readInt();
+                FileProcessor fileProcessor = new FileProcessor(fileManager);
+                fileProcessor.process(numOfThreads, filesList);
 
-            String key = in.readUTF();
-            Set<String> processedFiles = invertedIndex.getFilesForKey(key);
-            if (processedFiles.isEmpty()) out.writeUTF("No matching files found.");
-            out.writeUTF(processedFiles.toString());
+                String key = in.readUTF();
+                Set<String> processedFiles = invertedIndex.getFilesForKey(key);
+
+                if (processedFiles == null || processedFiles.isEmpty()) {out.writeUTF("No matching files found.");}
+                else{out.writeUTF(processedFiles.toString());}
+
+                String response = in.readUTF().toLowerCase();
+                if (!response.equals("yes")) break;
+            }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         } finally {
