@@ -1,3 +1,9 @@
+package client;
+
+import file.FileManager;
+import file.FileProcessor;
+import invertedindex.InvertedIndex;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.List;
