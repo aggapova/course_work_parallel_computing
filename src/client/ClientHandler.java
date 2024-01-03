@@ -31,15 +31,17 @@ public class ClientHandler implements Runnable {
             while (true) {
                 int numOfThreads = in.readInt();
                 FileProcessor fileProcessor = new FileProcessor(fileManager);
-                fileProcessor.process(numOfThreads, filesList);
+                out.writeLong(fileProcessor.process(numOfThreads, filesList));
 
                 String key = in.readUTF();
                 Set<String> processedFiles = invertedIndex.getFilesForKey(key);
 
                 if (processedFiles == null || processedFiles.isEmpty()) {out.writeUTF("No matching files found.");}
-                else{out.writeUTF(processedFiles.toString());}
+                else{
+                    out.writeUTF("Matching files:\n" + processedFiles);
+                }
 
-                String response = in.readUTF().toLowerCase();
+                String response = in.readUTF();
                 if (!response.equals("yes")) break;
             }
         } catch (IOException | InterruptedException e) {

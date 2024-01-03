@@ -17,13 +17,15 @@ public class Client {
             boolean continueSearching = true;
             while (continueSearching) {
                 System.out.print("Enter num of threads: ");
-                int numberOfThreads = scanner.nextInt();
-                out.writeInt(numberOfThreads);
+                int numOfThreads = scanner.nextInt();
+                out.writeInt(numOfThreads);
+                long buildTime = in.readLong();
+                System.out.printf("Time for building %s ms, threads: %s\n", buildTime, numOfThreads);
 
                 System.out.print("Enter the word: ");
                 scanner.nextLine();
-                String word = scanner.nextLine().toLowerCase();
-                out.writeUTF(word);
+                String key = scanner.nextLine().toLowerCase();
+                out.writeUTF(key);
 
                 String indexedFiles = in.readUTF();
                 System.out.println(indexedFiles);
